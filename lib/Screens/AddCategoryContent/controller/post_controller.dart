@@ -1,31 +1,41 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class PostController extends GetxController {
   TextEditingController categoryController = TextEditingController();
   RxString selectedCategory = ''.obs;
-  RxList<String> categories = [
-    'Футбол',
-    'Новости',
-    'UFC',
-    'Автомобили',
-    'Природа',
-    'Музыка',
-    'Аниме'
-  ].obs;
-  void addCategory() {
-    String newCategory = categoryController.text;
-    if (newCategory.isNotEmpty && !categories.contains(newCategory)) {
-      categories.add(newCategory);
+  RxList<String> categories = <String>[].obs;
+  void fetchCategories() async {
+    final firestore = FirebaseFirestore.instance;
+    QuerySnapshot snapshot = await firestore.collection('Category').get();
+    categories.value =
+        snapshot.docs.map((doc) => doc['name'] as String).toList();
+  }
+
+  void addNewCategory(String categoryName) async {
+    if (categoryName.isNotEmpty && !categories.contains(categoryName)) {
+      final firestore = FirebaseFirestore.instance;
+      await firestore.collection('Category').add({
+        'name': categoryName,
+      });
+      firestore.collection(categoryName);
+      categories.add(categoryName);
       categoryController.clear();
     }
   }
 
   void toggleCategory(String category) {
     if (selectedCategory.value == category) {
-      selectedCategory.value = ''; // Deselect if the same category is clicked
+      selectedCategory.value = '';
     } else {
-      selectedCategory.value = category; // Select the new category
+      selectedCategory.value = category;
     }
+  }
+
+  @override
+  void onInit() {
+    fetchCategories();
+    super.onInit();
   }
 }

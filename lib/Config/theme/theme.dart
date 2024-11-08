@@ -12,4 +12,5 @@ Color grey3 = const Color.fromARGB(255, 188, 229, 240);
 Color black2 = const Color.fromRGBO(29, 29, 38, 1);
 Color music = const Color.fromRGBO(107, 171, 255, 0.1);
 Color red = const Color.fromRGBO(226, 5, 18, 1);
-Color green = const Color.fromRGBO(1, 129, 52, 1);  
+Color green = const Color.fromRGBO(1, 129, 52, 1);
+Color green2 = const Color.fromRGBO(76, 175, 80, 1);

@@ -7,22 +7,30 @@ import '../../../Config/theme/theme.dart';
 import '../controller/banner_controller.dart';
 
 // ignore: must_be_immutable
-class AddBanner extends StatelessWidget {
+class AddBanner extends StatefulWidget {
+
+  const AddBanner({super.key});
+
+  @override
+  State<AddBanner> createState() => _AddBannerState();
+}
+
+class _AddBannerState extends State<AddBanner> {
   final BannerController bannerController = Get.put(BannerController());
 
-  AddBanner({super.key});
   File? selectedImage;
+
   Future<void> pickImage() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.image,
       allowMultiple: false,
     );
 
-    // if (result != null) {
-    //   setState(() {
-    //     selectedImage = File(result.files.single.path!);
-    //   });
-    // }
+    if (result != null) {
+      setState(() {
+        selectedImage = File(result.files.single.path!);
+      });
+    }
   }
 
   @override

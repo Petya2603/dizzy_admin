@@ -4,8 +4,12 @@ import 'package:dizzy_admin/Config/contstants/widgets.dart';
 import 'package:dizzy_admin/Config/theme/theme.dart';
 import 'package:dizzy_admin/Screens/Category/category_content.dart';
 import 'package:dizzy_admin/Screens/Home/home_controller.dart';
+import 'package:dizzy_admin/auth/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+
+import '../AddCategoryContent/add_category_content.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -14,17 +18,9 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen>
-    with SingleTickerProviderStateMixin {
+class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   final firestore = FirebaseFirestore.instance;
   final HomeController homeController = HomeController();
-
-  @override
-  void initState() {
-    super.initState();
-    homeController.tabController =
-        TabController(length: tabName.length, vsync: this);
-  }
 
   @override
   void dispose() {
@@ -92,11 +88,22 @@ class _HomeScreenState extends State<HomeScreen>
       actions: [
         TextButton(
           onPressed: () {
-            Get.toNamed('/addCategoryContent');
+            Get.to(AddCaregoryContent());
           },
           style: TextButton.styleFrom(foregroundColor: orange),
           child: const Text('Изменить'),
         ),
+        const SizedBox(
+          width: 5,
+        ),
+        IconButton(
+            onPressed: () {
+              AuthService().signOut();
+            },
+            icon: Icon(
+              Icons.logout,
+              color: orange,
+            )),
       ],
     );
   }
@@ -111,6 +118,8 @@ class _HomeScreenState extends State<HomeScreen>
           return Center(child: spinKit());
         }
         final category = snapshot.data?.docs ?? [];
+        homeController.tabController =
+            TabController(length: category.length, vsync: this);
         return Column(
           children: [
             TabBar(

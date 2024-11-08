@@ -17,7 +17,7 @@ class MenuButton extends StatelessWidget {
     return ListTile(
       title: Text(
         title,
-        style: TextStyle(color: isSelected ? white : Colors.black),
+        style: TextStyle(color: isSelected ? white : black),
       ),
       tileColor: isSelected ? orange : white,
       onTap: onTap,

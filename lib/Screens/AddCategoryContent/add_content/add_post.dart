@@ -1,160 +1,270 @@
-import 'dart:io';
+import 'dart:async';
+import 'dart:convert';
+import 'dart:typed_data';
 
-import 'package:dizzy_admin/Config/theme/theme.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dizzy_admin/Screens/AddCategoryContent/controller/post_controller.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
-class AddPost extends StatelessWidget {
-  AddPost({super.key});
-  PostController postController = PostController();
-  File? selectedImage;
+import '../../../Config/contstants/widgets.dart';
+import '../../../Config/theme/theme.dart';
+import '../add_category_content.dart';
+
+// ignore: must_be_immutable
+class AddPost extends StatefulWidget {
+  const AddPost({super.key});
+
+  @override
+  State<AddPost> createState() => _AddPostState();
+}
+
+class _AddPostState extends State<AddPost> {
+  final PostController postController = Get.put(PostController());
+  final _formKey = GlobalKey<FormState>();
+  bool isLoading = false;
+
   Future<void> pickImage() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.image,
       allowMultiple: false,
     );
 
-    // if (result != null) {
-    //   setState(() {
-    //     selectedImage = File(result.files.single.path!);
-    //   });
-    // }
+    if (result != null) {
+      setState(() {
+        _photo = result.files.single.bytes;
+      });
+    }
+  }
+
+  Uint8List? _photo;
+  Future uploadImage() async {
+    try {
+      final firestore = FirebaseFirestore.instance;
+      final String category = postController.selectedCategory.value;
+      if (category.isEmpty) {
+        showSnackbar("Ошибка проверки",
+            "Пожалуйста, выберите категорию перед сохранением.",
+            backgroundColor: red);
+        return;
+      }
+      DateTime now = DateTime.now();
+      final storageRef =
+          FirebaseStorage.instance.ref().child('post/images/$now.png');
+      List<int> imageBytes = _photo!;
+      String base64Image = base64Encode(imageBytes);
+
+      await storageRef
+          .putString(base64Image,
+              format: PutStringFormat.base64,
+              metadata: SettableMetadata(contentType: 'image/png'))
+          .then((p0) async {
+        var downloadUrl = await storageRef.getDownloadURL();
+        String url = downloadUrl.toString();
+
+        await firestore.collection(category).add({
+          'name': titleController.text,
+          'desc': descController.text,
+          // ignore: unnecessary_null_comparison
+          'images': url != null ? [url] : [],
+          'category': {
+            'id': '1',
+            'name': 'Пост',
+          },
+          'timestamp': FieldValue.serverTimestamp(),
+          'time': '05:00',
+        });
+        // ignore: use_build_context_synchronously
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => AddCaregoryContent()));
+        showSnackbar(
+          "Успех",
+          "Данные успешно загружены!",
+          backgroundColor: green2,
+        );
+      });
+    } catch (e) {
+      showSnackbar(
+        "Ошибка",
+        "Произошла ошибка при загрузке данных.",
+        backgroundColor: red,
+      );
+    }
   }
 
   TextEditingController titleController = TextEditingController();
-  TextEditingController textController = TextEditingController();
+  TextEditingController descController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(automaticallyImplyLeading: false, actions: [
         TextButton(
-          onPressed: () {},
+          onPressed: () {
+            if (_formKey.currentState!.validate()) {
+              setState(() {
+                isLoading = true;
+              });
+              uploadImage();
+            }
+          },
           child: Text('Сохранить', style: TextStyle(color: orange)),
         ),
       ]),
-      body: ListView(
-        children: [
-          const Text('Название',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 10),
-          TextFormField(
-            controller: titleController,
-            decoration: const InputDecoration(
-              labelText: 'Введите название',
-              border: OutlineInputBorder(),
-            ),
-          ),
-          const SizedBox(height: 10),
-          const Text('Фото',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 10),
-          GestureDetector(
-            onTap: pickImage, // Resim seçici
-            child: Stack(
-              alignment: Alignment.bottomRight,
-              children: [
-                Container(
-                  height: 200,
-                  width: double.infinity,
-                  color: Colors.grey[300],
-                  child: selectedImage != null
-                      ? Image.file(selectedImage!, fit: BoxFit.cover)
-                      : const Center(
-                          child: Text(
-                            ' Добавить Фото',
-                            style: TextStyle(color: Colors.black54),
-                          ),
-                        ),
+      body: Form(
+        key: _formKey,
+        child: ListView(
+          children: [
+            if (isLoading)
+              Container(
+                margin: const EdgeInsets.only(top: 15),
+                child: Center(
+                  child: CircularProgressIndicator(color: orange),
                 ),
-                if (selectedImage != null)
+              ),
+            const Text('Название',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 10),
+            buildTextFormField(
+              controller: titleController,
+              labelText: 'Введите название',
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Требуется название';
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: 10),
+            const Text('Фото',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 10),
+            GestureDetector(
+              onTap: pickImage,
+              child: Stack(
+                alignment: Alignment.bottomRight,
+                children: [
                   Container(
-                    padding: const EdgeInsets.all(8.0),
-                    color: orange,
-                    child: const Text(
-                      'Изменить',
-                      style: TextStyle(color: Colors.white),
+                    height: 200,
+                    width: double.infinity,
+                    color: Colors.grey[300],
+                    child: _photo != null
+                        ? Image.memory(_photo!, fit: BoxFit.fill)
+                        : const Center(
+                            child: Text(
+                              ' Добавить Фото',
+                              style: TextStyle(color: Colors.black54),
+                            ),
+                          ),
+                  ),
+                  if (_photo != null)
+                    Container(
+                      padding: const EdgeInsets.all(8.0),
+                      color: orange,
+                      child: const Text(
+                        'Изменить',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 10),
+            const Text('Текст',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 10),
+            SizedBox(
+              height: 80,
+              child: buildTextFormField(
+                labelText: 'Введите Текст',
+                controller: descController,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Требуется название';
+                  }
+                  return null;
+                },
+              ),
+            ),
+            const SizedBox(height: 10),
+            const Text('Категория',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                )),
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    controller: postController.categoryController,
+                    decoration: const InputDecoration(
+                      labelText: 'Введите название',
+                      border: OutlineInputBorder(),
                     ),
                   ),
+                ),
+                SizedBox(
+                  height: 56.0,
+                  child: ElevatedButton(
+                    onPressed: () => postController
+                        .addNewCategory(postController.categoryController.text),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: orange,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.zero,
+                      ),
+                    ),
+                    child: Text(
+                      'Добавить',
+                      style: TextStyle(color: white),
+                    ),
+                  ),
+                ),
               ],
             ),
-          ),
-          const SizedBox(height: 10),
-          const Text('Текст',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 10),
-          SizedBox(
-            height: 80,
-            child: TextFormField(
-              controller: textController,
-              maxLines: 10,
-              decoration: const InputDecoration(
-                labelText: 'Введите Текст',
-                border: OutlineInputBorder(),
-              ),
+            const SizedBox(height: 10),
+            FutureBuilder<QuerySnapshot>(
+              future: FirebaseFirestore.instance.collection('Category').get(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return Center(child: spinKit());
+                } else if (snapshot.error != null) {
+                  return const Text("Error");
+                }
+                var categories = snapshot.data!.docs
+                    .map((doc) => doc['name'] as String)
+                    .toList();
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  postController.categories.value = categories;
+                });
+                return Obx(() => Wrap(
+                      spacing: 12.0,
+                      runSpacing: 12.0,
+                      children: postController.categories.map((category) {
+                        bool isSelected =
+                            postController.selectedCategory.value == category;
+                        return ChoiceChip(
+                          label: Text(category),
+                          selected: isSelected,
+                          onSelected: (bool selected) {
+                            postController.toggleCategory(category);
+                          },
+                          selectedColor: black,
+                          backgroundColor: white,
+                          labelStyle:
+                              TextStyle(color: isSelected ? white : black),
+                          checkmarkColor: isSelected ? white : null,
+                        );
+                      }).toList(),
+                    ));
+              },
             ),
-          ),
-          const SizedBox(height: 10),
-          const Text('Категория',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              )),
-          const SizedBox(height: 10),
-          Row(
-            children: [
-              Expanded(
-                child: TextFormField(
-                  controller: postController.categoryController,
-                  decoration: const InputDecoration(
-                    labelText: 'Введите название',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 56.0,
-                child: ElevatedButton(
-                  onPressed: postController.addCategory,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: orange,
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.zero,
-                    ),
-                  ),
-                  child: Text(
-                    'Добавить',
-                    style: TextStyle(color: white),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          Obx(
-            () => Wrap(
-              spacing: 12.0,
-              runSpacing: 12.0,
-              children: postController.categories.map((category) {
-                bool isSelected =
-                    postController.selectedCategory.contains(category);
-                return ChoiceChip(
-                  label: Text(category),
-                  selected: isSelected,
-                  onSelected: (bool selected) {
-                    postController.toggleCategory(category);
-                  },
-                  selectedColor: black,
-                  backgroundColor: white,
-                  labelStyle: TextStyle(color: isSelected ? white : black),
-                  checkmarkColor: isSelected ? white : null,
-                );
-              }).toList(),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

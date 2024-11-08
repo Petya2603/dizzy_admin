@@ -10,6 +10,7 @@ import 'package:dizzy_admin/Screens/AddCategoryContent/compenents/button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+
 class AddCaregoryContent extends StatelessWidget {
   AddCaregoryContent({super.key});
   final AddCategoryContent categoryController = AddCategoryContent();
@@ -20,7 +21,7 @@ class AddCaregoryContent extends StatelessWidget {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-            Get.toNamed('/home');
+            Get.back();
           },
           icon: const Icon(Icons.arrow_back),
         ),
@@ -114,15 +115,15 @@ class AddCaregoryContent extends StatelessWidget {
     return Obx(() {
       switch (categoryController.selectedIndex.value) {
         case 0:
-          return AddBanner();
+          return const AddBanner();
         case 1:
-          return AddPost();
+          return const AddPost();
         case 2:
-          return AddAudio();
+          return const AddAudio();
         case 3:
-          return AddVideo();
+          return const AddVideo();
         default:
-          return const Center(child: Text("Bir içerik seçin"));
+          return const Center(child: Text(""));
       }
     });
   }
