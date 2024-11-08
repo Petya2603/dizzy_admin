@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
+import 'package:dizzy_admin/Config/contstants/widgets.dart';
 import '../../Config/theme/theme.dart';
 
 class ContactUsTableScreen extends StatelessWidget {
-  const ContactUsTableScreen({Key? key}) : super(key: key);
+  const ContactUsTableScreen({super.key});
 
   String formatTimestamp(Timestamp timestamp) {
     DateTime dateTime = timestamp.toDate();
@@ -25,38 +25,37 @@ class ContactUsTableScreen extends StatelessWidget {
         stream: FirebaseFirestore.instance.collection('Contact_Us').snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return const Center(child: CircularProgressIndicator());
+            return Center(child: spinKit());
           }
 
           List<TableRow> tableRows = [
             TableRow(
               decoration: BoxDecoration(color: orange),
-              children: const [
+              children: [
                 TableCell(
                     child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text('Имя',
-                            style: TextStyle(color: Colors.white)))),
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text('Имя', style: TextStyle(color: white)))),
                 TableCell(
                     child: Padding(
-                        padding: EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(8.0),
                         child: Text('Номер телефона или почта',
-                            style: TextStyle(color: Colors.white)))),
+                            style: TextStyle(color: white)))),
                 TableCell(
                     child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text('Сообщение',
-                            style: TextStyle(color: Colors.white)))),
+                        padding: const EdgeInsets.all(8.0),
+                        child:
+                            Text('Сообщение', style: TextStyle(color: white)))),
                 TableCell(
                     child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text('Timestamp',
-                            style: TextStyle(color: Colors.white)))),
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text('Временная метка',
+                            style: TextStyle(color: white)))),
                 TableCell(
                     child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text('Удалить',
-                            style: TextStyle(color: Colors.white)))),
+                        padding: const EdgeInsets.all(8.0),
+                        child:
+                            Text('Удалить', style: TextStyle(color: white)))),
               ],
             ),
           ];
@@ -110,7 +109,7 @@ class ContactUsTableScreen extends StatelessWidget {
             padding: const EdgeInsets.all(16.0),
             child: Center(
               child: ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: 800),
+                constraints: const BoxConstraints(maxWidth: 800),
                 child: Table(
                   border: TableBorder.all(color: orange),
                   children: tableRows,

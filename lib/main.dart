@@ -1,12 +1,9 @@
 import 'package:dizzy_admin/Config/theme/theme.dart';
-import 'package:dizzy_admin/Screens/Home/home_screen.dart';
 import 'package:dizzy_admin/auth/auth_service.dart';
-import 'package:dizzy_admin/auth/login_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'Screens/AddCategoryContent/add_category_content.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
