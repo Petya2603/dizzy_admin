@@ -10,7 +10,6 @@ import 'package:dizzy_admin/Screens/AddCategoryContent/compenents/button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-
 class AddCaregoryContent extends StatelessWidget {
   AddCaregoryContent({super.key});
   final AddCategoryContent categoryController = AddCategoryContent();

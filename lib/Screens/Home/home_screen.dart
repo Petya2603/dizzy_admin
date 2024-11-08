@@ -8,8 +8,8 @@ import 'package:dizzy_admin/auth/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-
 import '../AddCategoryContent/add_category_content.dart';
+import '../Contact_us/contact_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -94,7 +94,18 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           child: const Text('Изменить'),
         ),
         const SizedBox(
-          width: 5,
+          width: 10,
+        ),
+        IconButton(
+            onPressed: () {
+              Get.to(const ContactUsTableScreen());
+            },
+            icon: Icon(
+              Icons.quick_contacts_mail,
+              color: orange,
+            )),
+        const SizedBox(
+          width: 10,
         ),
         IconButton(
             onPressed: () {
