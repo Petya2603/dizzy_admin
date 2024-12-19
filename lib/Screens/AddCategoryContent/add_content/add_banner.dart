@@ -3,12 +3,11 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../Config/theme/theme.dart';
+import '../../../config/constants/constants.dart';
 import '../controller/banner_controller.dart';
 
 // ignore: must_be_immutable
 class AddBanner extends StatefulWidget {
-
   const AddBanner({super.key});
 
   @override
@@ -39,7 +38,7 @@ class _AddBannerState extends State<AddBanner> {
       appBar: AppBar(automaticallyImplyLeading: false, actions: [
         TextButton(
           onPressed: () {},
-          child: Text('Сохранить', style: TextStyle(color: orange)),
+          child: Text('Сохранить', style: TextStyle(color: AppColors.orange)),
         ),
       ]),
       body: ListView(
@@ -68,7 +67,7 @@ class _AddBannerState extends State<AddBanner> {
                 if (selectedImage != null)
                   Container(
                     padding: const EdgeInsets.all(8.0),
-                    color: orange,
+                    color: AppColors.orange,
                     child: const Text(
                       'Изменить',
                       style: TextStyle(color: Colors.white),
@@ -92,14 +91,16 @@ class _AddBannerState extends State<AddBanner> {
                           shape: const RoundedRectangleBorder(
                             borderRadius: BorderRadius.zero,
                           ),
-                          backgroundColor:
-                              bannerController.isHidden.value ? white : red,
-                          side: BorderSide(color: red),
+                          backgroundColor: bannerController.isHidden.value
+                              ? AppColors.white
+                              : Colors.red,
+                          side: const BorderSide(color: Colors.red),
                           padding: const EdgeInsets.symmetric(vertical: 20)),
                       child: Text('Скрывать',
                           style: TextStyle(
-                            color:
-                                bannerController.isHidden.value ? red : white,
+                            color: bannerController.isHidden.value
+                                ? Colors.red
+                                : AppColors.white,
                           )),
                     ),
                   ),
@@ -114,17 +115,19 @@ class _AddBannerState extends State<AddBanner> {
                           shape: const RoundedRectangleBorder(
                             borderRadius: BorderRadius.zero,
                           ),
-                          backgroundColor:
-                              bannerController.isHidden.value ? green : white,
-                          side: BorderSide(
-                            color: green,
+                          backgroundColor: bannerController.isHidden.value
+                              ? Colors.green
+                              : AppColors.white,
+                          side: const BorderSide(
+                            color: Colors.green,
                             width: 2.0,
                           ),
                           padding: const EdgeInsets.symmetric(vertical: 20)),
                       child: Text('Показать',
                           style: TextStyle(
-                            color:
-                                bannerController.isHidden.value ? white : green,
+                            color: bannerController.isHidden.value
+                                ? AppColors.white
+                                : Colors.green,
                           )),
                     ),
                   ),

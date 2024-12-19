@@ -1,9 +1,8 @@
-import 'package:dizzy_admin/Config/theme/theme.dart';
 import 'package:dizzy_admin/auth/auth_service.dart';
+import 'package:dizzy_admin/config/constants/constants.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,16 +23,15 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
       theme: ThemeData(
-        scaffoldBackgroundColor: white,
-        primaryColor: orange,
-        fontFamily: "Gilroy",
-        appBarTheme: AppBarTheme(
-          backgroundColor: white,
+        scaffoldBackgroundColor: AppColors.white,
+        primaryColor: AppColors.orange,
+        fontFamily: Fonts.gilroySemiBold,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: AppColors.white,
         ),
       ),
       debugShowCheckedModeBanner: false,

@@ -1,9 +1,7 @@
 import 'package:dizzy_admin/auth/auth_service.dart';
+import 'package:dizzy_admin/config/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../Config/contstants/constants.dart';
-import '../Config/theme/theme.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -51,10 +49,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
+                          const Text(
                             "Welcome Back!",
                             style: TextStyle(
-                              color: black2,
+                              color: AppColors.black2,
                               fontSize: 45,
                               fontWeight: FontWeight.bold,
                             ),
@@ -63,7 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             height: 75,
                           ),
                           Image.asset(
-                            logoadmin,
+                            Assets.logoAdmin,
                             fit: BoxFit.cover,
                           ),
                         ]),
@@ -91,7 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
             height: 200,
             width: 250,
             child: Image.asset(
-              logoadmin,
+              Assets.logoAdmin,
               fit: BoxFit.contain,
             ),
           ),
@@ -110,12 +108,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       'Sign in',
                       style: TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
-                        color: orange,
+                        color: AppColors.orange,
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -174,11 +172,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
-                                backgroundColor: black2,
+                                backgroundColor: AppColors.black2,
                               ),
-                              child: Text(
+                              child: const Text(
                                 "SIGN UP",
-                                style: TextStyle(fontSize: 18, color: orange),
+                                style: TextStyle(fontSize: 18, color: AppColors.orange),
                               ),
                             ),
                           ),
@@ -230,12 +228,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       'Sign in',
                       style: TextStyle(
                         fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                        color: orange,
+                        fontFamily: Fonts.gilroyBold,
+                        color: AppColors.orange,
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -292,11 +290,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
-                                backgroundColor: black,
+                                backgroundColor: AppColors.black,
                               ),
-                              child: Text(
+                              child: const Text(
                                 "SIGN UP",
-                                style: TextStyle(fontSize: 18, color: orange),
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    color: AppColors.orange,
+                                    fontFamily: Fonts.gilroyBold),
                               ),
                             ),
                           ),

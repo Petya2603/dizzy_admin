@@ -1,5 +1,6 @@
-import 'package:dizzy_admin/Config/theme/theme.dart';
 import 'package:flutter/material.dart';
+
+import '../../../config/constants/constants.dart';
 
 class MenuButton extends StatelessWidget {
   final String title;
@@ -17,9 +18,9 @@ class MenuButton extends StatelessWidget {
     return ListTile(
       title: Text(
         title,
-        style: TextStyle(color: isSelected ? white : black),
+        style: TextStyle(color: isSelected ? AppColors.white : AppColors.black),
       ),
-      tileColor: isSelected ? orange : white,
+      tileColor: isSelected ? AppColors.orange : AppColors.white,
       onTap: onTap,
     );
   }

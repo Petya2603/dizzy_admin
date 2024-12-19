@@ -7,10 +7,10 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:dizzy_admin/Config/theme/theme.dart';
+import '../../../config/constants/constants.dart';
+import '../../../config/constants/widgets.dart';
 import '../add_category_content.dart';
 import '../controller/post_controller.dart';
-import '../../../Config/contstants/widgets.dart';
 
 // ignore: must_be_immutable
 class AddVideo extends StatefulWidget {
@@ -45,16 +45,16 @@ class _AddVideoState extends State<AddVideo> {
       final firestore = FirebaseFirestore.instance;
       final String category = videoController.selectedCategory.value;
       if (category.isEmpty) {
-        showSnackbar(
+        showSnackBar(
           "Ошибка проверки",
           "Пожалуйста, выберите категорию перед сохранением.",
-          backgroundColor: red,
+          Colors.red,
         );
         return;
       }
       DateTime now = DateTime.now();
       final storageRef =
-          FirebaseStorage.instance.ref().child('video/video/$now.mp4');
+          FirebaseStorage.instance.ref().child('video/video/$now.m3u8');
       List<int> videoBytes = _video!;
       String base64Video = base64Encode(videoBytes);
       await storageRef
@@ -79,12 +79,11 @@ class _AddVideoState extends State<AddVideo> {
         // ignore: use_build_context_synchronously
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (context) => AddCaregoryContent()));
-        showSnackbar("Успех", "Данные успешно загружены!",
-            backgroundColor: green2);
+        showSnackBar("Успех", "Данные успешно загружены!", Colors.green);
       });
     } catch (e) {
-      showSnackbar("Ошибка", "Произошла ошибка при загрузке данных.",
-          backgroundColor: red);
+      showSnackBar(
+          "Ошибка", "Произошла ошибка при загрузке данных.", Colors.red);
     }
   }
 
@@ -104,7 +103,8 @@ class _AddVideoState extends State<AddVideo> {
               uploadVideo();
             }
           },
-          child: Text('Сохранить', style: TextStyle(color: orange)),
+          child: const Text('Сохранить',
+              style: TextStyle(color: AppColors.orange)),
         ),
       ]),
       body: Form(
@@ -114,8 +114,8 @@ class _AddVideoState extends State<AddVideo> {
             if (isLoading)
               Container(
                 margin: const EdgeInsets.only(top: 15),
-                child: Center(
-                  child: CircularProgressIndicator(color: orange),
+                child: const Center(
+                  child: CircularProgressIndicator(color: AppColors.orange),
                 ),
               ),
             const Text('Название',
@@ -124,12 +124,7 @@ class _AddVideoState extends State<AddVideo> {
             buildTextFormField(
               controller: titleController,
               labelText: 'Введите название',
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Требуется название';
-                }
-                return null;
-              },
+              hintText: 'Введите название',
             ),
             const SizedBox(height: 10),
             const Text('Исполнитель',
@@ -138,12 +133,7 @@ class _AddVideoState extends State<AddVideo> {
             buildTextFormField(
               controller: descController,
               labelText: 'Введите имя исполнителя',
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Требуется название';
-                }
-                return null;
-              },
+              hintText: 'Введите имя исполнителя',
             ),
             const SizedBox(height: 10),
             const Text('Видео',
@@ -162,23 +152,23 @@ class _AddVideoState extends State<AddVideo> {
                     width: double.infinity,
                     color: Colors.grey[300],
                     child: _video != null
-                        ? Center(
+                        ? const Center(
                             child: Text(
                               'Видео добавлено',
-                              style: TextStyle(color: green),
+                              style: TextStyle(color: Colors.green),
                             ),
                           )
-                        : Center(
+                        : const Center(
                             child: Text(
                               'Добавить Видео',
-                              style: TextStyle(color: grey1),
+                              style: TextStyle(color: AppColors.grey1),
                             ),
                           ),
                   ),
                   if (_video != null)
                     Container(
                       padding: const EdgeInsets.all(8.0),
-                      color: orange,
+                      color: AppColors.orange,
                       child: const Text(
                         'Изменить',
                         style: TextStyle(color: Colors.white),
@@ -200,6 +190,7 @@ class _AddVideoState extends State<AddVideo> {
                   child: buildTextFormField(
                     controller: videoController.categoryController,
                     labelText: 'Введите название',
+                    hintText: 'Введите название',
                   ),
                 ),
                 SizedBox(
@@ -208,14 +199,14 @@ class _AddVideoState extends State<AddVideo> {
                     onPressed: () => videoController.addNewCategory(
                         videoController.categoryController.text),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: orange,
+                      backgroundColor: AppColors.orange,
                       shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.zero,
                       ),
                     ),
-                    child: Text(
+                    child: const Text(
                       'Добавить',
-                      style: TextStyle(color: white),
+                      style: TextStyle(color: AppColors.white),
                     ),
                   ),
                 ),
@@ -248,11 +239,13 @@ class _AddVideoState extends State<AddVideo> {
                           onSelected: (bool selected) {
                             videoController.toggleCategory(category);
                           },
-                          selectedColor: black,
-                          backgroundColor: white,
-                          labelStyle:
-                              TextStyle(color: isSelected ? white : black),
-                          checkmarkColor: isSelected ? white : null,
+                          selectedColor: AppColors.black,
+                          backgroundColor: AppColors.white,
+                          labelStyle: TextStyle(
+                              color: isSelected
+                                  ? AppColors.white
+                                  : AppColors.black),
+                          checkmarkColor: isSelected ? AppColors.white : null,
                         );
                       }).toList(),
                     ));

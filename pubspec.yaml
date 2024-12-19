@@ -11,7 +11,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
   cupertino_icons: ^1.0.6
   get: ^4.6.6
   flutter_svg: ^2.0.10+1
@@ -19,32 +18,34 @@ dependencies:
   firebase_core: 
   extended_image: ^9.0.4
   flick_video_player: ^0.9.0
-  audioplayers: 
   file_picker: ^8.0.5
   firebase_storage: ^12.2.0
   firebase_auth: ^5.2.0
-  video_compress: ^3.1.3
   flutter_native_splash: ^2.4.0
-
-
-
+  path_provider: ^2.0.15
+  assets_audio_player: ^3.1.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
-
   flutter_lints: ^4.0.0
-
-
 flutter:
-  uses-material-design: true
   assets:
     - assets/images/
     - assets/icons/
-
+    - assets/font/
   fonts:
-    - family: Gilroy
+    - family: GilroyBold
       fonts:
         - asset: assets/font/Gilroy-Bold.ttf
-
+    - family: GilroySemiBold
+      fonts:
+        - asset: assets/font/Gilroy-SemiBold.ttf
+    - family: GilroyMedium
+      fonts:
+        - asset: assets/font/Gilroy-Medium.ttf
+    - family: GilroyRegular
+      fonts:
+        - asset: assets/font/Gilroy-Regular.ttf
+  uses-material-design: true
+  generate: true
 

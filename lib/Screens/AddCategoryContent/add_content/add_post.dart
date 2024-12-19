@@ -1,17 +1,15 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dizzy_admin/Screens/AddCategoryContent/controller/post_controller.dart';
+import 'package:dizzy_admin/config/constants/widgets.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../../Config/contstants/widgets.dart';
-import '../../../Config/theme/theme.dart';
+import '../../../config/constants/constants.dart';
 import '../add_category_content.dart';
 
 // ignore: must_be_immutable
@@ -46,9 +44,8 @@ class _AddPostState extends State<AddPost> {
       final firestore = FirebaseFirestore.instance;
       final String category = postController.selectedCategory.value;
       if (category.isEmpty) {
-        showSnackbar("Ошибка проверки",
-            "Пожалуйста, выберите категорию перед сохранением.",
-            backgroundColor: red);
+        showSnackBar("Ошибка проверки",
+            "Пожалуйста, выберите категорию перед сохранением.", Colors.red);
         return;
       }
       DateTime now = DateTime.now();
@@ -80,17 +77,17 @@ class _AddPostState extends State<AddPost> {
         // ignore: use_build_context_synchronously
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (context) => AddCaregoryContent()));
-        showSnackbar(
+        showSnackBar(
           "Успех",
           "Данные успешно загружены!",
-          backgroundColor: green2,
+          Colors.green,
         );
       });
     } catch (e) {
-      showSnackbar(
+      showSnackBar(
         "Ошибка",
         "Произошла ошибка при загрузке данных.",
-        backgroundColor: red,
+        Colors.red,
       );
     }
   }
@@ -111,7 +108,7 @@ class _AddPostState extends State<AddPost> {
               uploadImage();
             }
           },
-          child: Text('Сохранить', style: TextStyle(color: orange)),
+          child: const Text('Сохранить', style: TextStyle(color: AppColors.orange)),
         ),
       ]),
       body: Form(
@@ -121,8 +118,8 @@ class _AddPostState extends State<AddPost> {
             if (isLoading)
               Container(
                 margin: const EdgeInsets.only(top: 15),
-                child: Center(
-                  child: CircularProgressIndicator(color: orange),
+                child: const Center(
+                  child: CircularProgressIndicator(color: AppColors.orange),
                 ),
               ),
             const Text('Название',
@@ -131,12 +128,7 @@ class _AddPostState extends State<AddPost> {
             buildTextFormField(
               controller: titleController,
               labelText: 'Введите название',
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Требуется название';
-                }
-                return null;
-              },
+              hintText: 'Введите название',
             ),
             const SizedBox(height: 10),
             const Text('Фото',
@@ -163,7 +155,7 @@ class _AddPostState extends State<AddPost> {
                   if (_photo != null)
                     Container(
                       padding: const EdgeInsets.all(8.0),
-                      color: orange,
+                      color: AppColors.orange,
                       child: const Text(
                         'Изменить',
                         style: TextStyle(color: Colors.white),
@@ -181,12 +173,7 @@ class _AddPostState extends State<AddPost> {
               child: buildTextFormField(
                 labelText: 'Введите Текст',
                 controller: descController,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Требуется название';
-                  }
-                  return null;
-                },
+                hintText: 'Введите Текст',
               ),
             ),
             const SizedBox(height: 10),
@@ -213,14 +200,14 @@ class _AddPostState extends State<AddPost> {
                     onPressed: () => postController
                         .addNewCategory(postController.categoryController.text),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: orange,
+                      backgroundColor: AppColors.orange,
                       shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.zero,
                       ),
                     ),
-                    child: Text(
+                    child: const Text(
                       'Добавить',
-                      style: TextStyle(color: white),
+                      style: TextStyle(color: AppColors.white),
                     ),
                   ),
                 ),
@@ -253,11 +240,13 @@ class _AddPostState extends State<AddPost> {
                           onSelected: (bool selected) {
                             postController.toggleCategory(category);
                           },
-                          selectedColor: black,
-                          backgroundColor: white,
-                          labelStyle:
-                              TextStyle(color: isSelected ? white : black),
-                          checkmarkColor: isSelected ? white : null,
+                          selectedColor: AppColors.black,
+                          backgroundColor: AppColors.white,
+                          labelStyle: TextStyle(
+                              color: isSelected
+                                  ? AppColors.white
+                                  : AppColors.black),
+                          checkmarkColor: isSelected ? AppColors.white : null,
                         );
                       }).toList(),
                     ));

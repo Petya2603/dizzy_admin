@@ -1,6 +1,5 @@
-import 'package:dizzy_admin/Config/contstants/constants.dart';
+import 'package:dizzy_admin/config/constants/constants.dart';
 import 'package:flick_video_player/flick_video_player.dart';
-import 'package:dizzy_admin/Config/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 // ignore: depend_on_referenced_packages
@@ -48,15 +47,16 @@ class VideoCardState extends State<VideoCard> {
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             Text(
               widget.text,
-              style: TextStyle(fontSize: 18, color: black2),
+              style: const TextStyle(fontSize: 18, color: AppColors.black2),
               overflow: TextOverflow.ellipsis,
               maxLines: 2,
             ),
             IconButton(
               onPressed: () {},
               icon: SvgPicture.asset(
-                deleted,
-                colorFilter: ColorFilter.mode(orange, BlendMode.srcIn),
+                Assets.delete,
+                colorFilter:
+                    const ColorFilter.mode(AppColors.orange, BlendMode.srcIn),
               ),
             ),
           ]),

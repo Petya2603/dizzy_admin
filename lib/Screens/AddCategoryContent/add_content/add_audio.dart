@@ -6,9 +6,8 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../../Config/contstants/widgets.dart';
-import '../../../Config/theme/theme.dart';
+import '../../../config/constants/constants.dart';
+import '../../../config/constants/widgets.dart';
 import '../add_category_content.dart';
 import '../controller/post_controller.dart';
 
@@ -40,8 +39,7 @@ class _AddAudioState extends State<AddAudio> {
         });
       }
     } catch (e) {
-      showSnackbar("Ошибка проверки", "Фото не добавлено",
-          backgroundColor: red);
+      showSnackBar("Ошибка проверки", "Фото не добавлено", Colors.red);
     }
   }
 
@@ -58,8 +56,7 @@ class _AddAudioState extends State<AddAudio> {
         });
       }
     } catch (e) {
-      showSnackbar("Ошибка проверки", "Аудио не добавлено",
-          backgroundColor: red);
+      showSnackBar("Ошибка проверки", "Аудио не добавлено", Colors.red);
     }
   }
 
@@ -71,9 +68,8 @@ class _AddAudioState extends State<AddAudio> {
       final firestore = FirebaseFirestore.instance;
       final String category = audioController.selectedCategory.value;
       if (category.isEmpty) {
-        showSnackbar("Ошибка проверки",
-            "Пожалуйста, выберите категорию перед сохранением.",
-            backgroundColor: red);
+        showSnackBar("Ошибка проверки",
+            "Пожалуйста, выберите категорию перед сохранением.", Colors.red);
         return;
       }
       DateTime now = DateTime.now();
@@ -121,14 +117,12 @@ class _AddAudioState extends State<AddAudio> {
           // ignore: use_build_context_synchronously
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) => AddCaregoryContent()));
-          showSnackbar("Успех", "Данные успешно загружены!",
-              backgroundColor: green2);
+          showSnackBar("Успех", "Данные успешно загружены!", Colors.green);
         });
       });
     } catch (e) {
-      showSnackbar("Ошибка проверки",
-          "Пожалуйста, выберите категорию перед сохранением.",
-          backgroundColor: red);
+      showSnackBar("Ошибка проверки",
+          "Пожалуйста, выберите категорию перед сохранением.", Colors.red);
     }
   }
 
@@ -145,7 +139,7 @@ class _AddAudioState extends State<AddAudio> {
               uploadMedia();
             }
           },
-          child: Text('Сохранить', style: TextStyle(color: orange)),
+          child: const Text('Сохранить', style: TextStyle(color: AppColors.orange)),
         ),
       ]),
       body: Form(
@@ -154,23 +148,17 @@ class _AddAudioState extends State<AddAudio> {
           if (isLoading)
             Container(
               margin: const EdgeInsets.only(top: 15),
-              child: Center(
-                child: CircularProgressIndicator(color: orange),
+              child: const Center(
+                child: CircularProgressIndicator(color: AppColors.orange),
               ),
             ),
           const Text('Название',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
           const SizedBox(height: 5),
           buildTextFormField(
-            labelText: 'Введите название',
-            controller: titleController,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Требуется название';
-              }
-              return null;
-            },
-          ),
+              labelText: 'Введите название',
+              controller: titleController,
+              hintText: 'Введите название'),
           const SizedBox(height: 5),
           const Text('Исполнитель',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
@@ -178,12 +166,7 @@ class _AddAudioState extends State<AddAudio> {
           buildTextFormField(
             labelText: 'Введите имя исполнителя',
             controller: descController,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Требуется название';
-              }
-              return null;
-            },
+            hintText: 'Введите имя исполнителя',
           ),
           const SizedBox(height: 10),
           const Text('Фото',
@@ -210,10 +193,10 @@ class _AddAudioState extends State<AddAudio> {
                 if (_photo != null)
                   Container(
                     padding: const EdgeInsets.all(8.0),
-                    color: orange,
-                    child: Text(
+                    color: AppColors.orange,
+                    child: const Text(
                       'Изменить',
-                      style: TextStyle(color: white),
+                      style: TextStyle(color: AppColors.white),
                     ),
                   ),
               ],
@@ -231,12 +214,12 @@ class _AddAudioState extends State<AddAudio> {
                 width: double.infinity,
                 color: Colors.grey[300],
                 child: _music != null
-                    ? Row(
+                    ? const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
                             "Аудио добавлено",
-                            style: TextStyle(color: green),
+                            style: TextStyle(color: Colors.green),
                           ),
                         ],
                       )
@@ -250,10 +233,10 @@ class _AddAudioState extends State<AddAudio> {
               if (_music != null)
                 Container(
                   padding: const EdgeInsets.all(8.0),
-                  color: orange,
-                  child: Text(
+                  color: AppColors.orange,
+                  child: const Text(
                     'Изменить',
-                    style: TextStyle(color: white),
+                    style: TextStyle(color: AppColors.white),
                   ),
                 ),
             ]),
@@ -271,6 +254,7 @@ class _AddAudioState extends State<AddAudio> {
                 child: buildTextFormField(
                   labelText: 'Введите название',
                   controller: audioController.categoryController,
+                  hintText: 'Введите название',
                 ),
               ),
               SizedBox(
@@ -279,14 +263,14 @@ class _AddAudioState extends State<AddAudio> {
                   onPressed: () => audioController
                       .addNewCategory(audioController.categoryController.text),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: orange,
+                    backgroundColor: AppColors.orange,
                     shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.zero,
                     ),
                   ),
-                  child: Text(
+                  child: const Text(
                     'Добавить',
-                    style: TextStyle(color: white),
+                    style: TextStyle(color: AppColors.white),
                   ),
                 ),
               ),
@@ -320,11 +304,11 @@ class _AddAudioState extends State<AddAudio> {
                         onSelected: (bool selected) {
                           audioController.toggleCategory(category);
                         },
-                        selectedColor: black,
-                        backgroundColor: white,
+                        selectedColor: AppColors.black,
+                        backgroundColor: AppColors.white,
                         labelStyle:
-                            TextStyle(color: isSelected ? white : black),
-                        checkmarkColor: isSelected ? white : null,
+                            TextStyle(color: isSelected ? AppColors.white : AppColors.black),
+                        checkmarkColor: isSelected ? AppColors.white : null,
                       );
                     }).toList(),
                   ));

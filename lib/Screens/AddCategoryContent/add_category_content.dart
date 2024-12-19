@@ -1,6 +1,3 @@
-// ignore_for_file: unrelated_type_equality_checks
-
-import 'package:dizzy_admin/Config/contstants/constants.dart';
 import 'package:dizzy_admin/Screens/AddCategoryContent/controller/addCategoryContent_controller.dart';
 import 'package:dizzy_admin/Screens/AddCategoryContent/add_content/add_audio.dart';
 import 'package:dizzy_admin/Screens/AddCategoryContent/add_content/add_banner.dart';
@@ -9,6 +6,8 @@ import 'package:dizzy_admin/Screens/AddCategoryContent/add_content/add_video.dar
 import 'package:dizzy_admin/Screens/AddCategoryContent/compenents/button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../../config/constants/constants.dart';
 
 class AddCaregoryContent extends StatelessWidget {
   AddCaregoryContent({super.key});
